@@ -5,6 +5,8 @@ pragma solidity >=0.8.7 < 0.9.0;
 // Kid(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db, "Jane", "Mary", 1654382738, 0, false),
 // Kid(0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB, "Uladis", "Encarnacion", 1656967227, 0, false)
 
+/// @author Rafael Mejia Blanco
+/// @title contract to parent manage kid's wallets
 contract CryptoParent {
     // owner DAD
     address owner;
@@ -15,7 +17,7 @@ contract CryptoParent {
         owner = msg.sender;
     }
 
-    //define Kid
+    /// @dev define Kid
     struct Kid {
         address payable walletAddress;
         string firstName;
@@ -27,12 +29,18 @@ contract CryptoParent {
 
     Kid[] public kids;
 
+    /// @dev controller for owner controls transactions only
     modifier onlyOwner() {
         require(msg.sender == owner, "Only the owner can add kids");
         _;
     }
 
-    // Add kid to contract
+    /// @param walletAddress Kid's payable address
+    /// @param firstName Kid's string name
+    /// @param lastName Kid's string lastName
+    /// @param releaseTime Uint Time when Kid will be capable of manage their account by their own.
+    /// @param amount Uint Initial amount that kid will start holding
+    /// @param canWithdraw Bool that specify if the kid is capable of withdraw its account
     function addKid(address payable walletAddress, string memory firstName, string memory lastName, uint releaseTime, uint amount, bool canWithdraw) public onlyOwner{
         kids.push(Kid(
             walletAddress,
